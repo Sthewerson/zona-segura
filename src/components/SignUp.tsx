@@ -1,49 +1,52 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../navigation/AppNavigator';
+import React, { useState } from "react";
+import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../navigation/AppNavigator";
+import { UserService } from "../services/userService";
 
-type SignUpScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUp'>;
+type SignUpScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "SignUp"
+>;
 
 type SignUpScreenProps = {
   navigation: SignUpScreenNavigationProp;
 };
 
 const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
-  const [fullName, setFullName] = useState('');
-  const [cpf, setCPF] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [dob, setDOB] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [cpf, setCPF] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [dob, setDOB] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   const validateEmail = (inputEmail: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setEmailError(emailRegex.test(inputEmail) ? '' : 'Email inválido');
+    setEmailError(emailRegex.test(inputEmail) ? "" : "Email inválido");
   };
 
   const handleSignUp = async () => {
+    const userService = new UserService();
     if (emailError) {
       // Se houver um erro de e-mail, não prossiga com o cadastro
       return;
     }
 
     try {
-      const response = await createAccount({
-        fullName,
-        cpf,
-        email,
-        password,
-        dob,
+      const response = await userService.register({
+        name: fullName,
+        cpf: cpf,
+        email: email,
+        password: password,
+        birthday: new Date(dob),
       });
-
-      if (response.success) {
-        //navigation.navigate('Account');
-      } else {
-        console.error('Erro ao criar conta:', response.error);
+      console.log(response);
+      if (!response) {
+        console.log("erro ao criar conta, tente novamente");
       }
     } catch (error) {
-      console.error('Erro ao criar conta:', error);
+      console.log("Erro ao criar conta:", error);
     }
   };
 
@@ -72,11 +75,13 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
           value={email}
           onChangeText={(text) => {
             setEmail(text);
-            setEmailError('');
+            setEmailError("");
           }}
           onBlur={() => validateEmail(email)}
         />
-        {emailError ? <Text style={styles.errorMessage}>{emailError}</Text> : null}
+        {emailError ? (
+          <Text style={styles.errorMessage}>{emailError}</Text>
+        ) : null}
       </View>
 
       <TextInput
@@ -102,8 +107,8 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   title: {
@@ -112,22 +117,22 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: '100%',
-    borderColor: 'gray',
+    width: "100%",
+    borderColor: "gray",
     borderWidth: 1,
     marginBottom: 10,
     padding: 10,
   },
   emailContainer: {
-    position: 'relative',
-    width: '100%',
+    position: "relative",
+    width: "100%",
   },
   errorInput: {
-    borderColor: 'red',
+    borderColor: "red",
   },
   errorMessage: {
-    color: 'red',
-    position: 'absolute',
+    color: "red",
+    position: "absolute",
     bottom: -20,
   },
 });
