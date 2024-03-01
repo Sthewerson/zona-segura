@@ -3,6 +3,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from '../components/Login';
 import SignUp from '../components/SignUp';
+import Map from '../components/map/Map';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -18,6 +19,7 @@ const AppNavigator: React.FC = () => {
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
+      <Stack.Screen name="Main" component={Map} />
     </Stack.Navigator>
   );
 };
