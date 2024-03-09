@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import loginStyles from '../styles/loginStyles';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -26,60 +27,33 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="CPF"
-        value={cpf}
-        onChangeText={setCPF}
-      />
+    <View style={loginStyles.container}>
+      <View style={loginStyles.purpleContainer}>
+        <TextInput
+          style={loginStyles.input}
+          placeholder="CPF"
+          value={cpf}
+          onChangeText={setCPF}
+        />
+        <TextInput
+          style={loginStyles.input}
+          placeholder="Senha"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+       
+        <TouchableOpacity style={loginStyles.loginButton} onPress={handleLogin}>
+          <Text style={loginStyles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-
-      <Button title="Login" onPress={handleLogin} />
-
-      <View style={styles.signupContainer}>
-        <Text style={styles.signupText}>Não possui cadastro?</Text>
+        <Text style={loginStyles.signupText}>Não possui cadastro?</Text>
         <TouchableOpacity onPress={navigateToSignUp}>
-          <Text style={[styles.signupText, styles.signupButton]}>Cadastre-se</Text>
+          <Text style={[loginStyles.signupText, loginStyles.signupButton]}>Cadastre-se</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  input: {
-    height: 40,
-    width: '100%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
-  },
-  signupContainer: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  signupText: {
-    textAlign: 'center',
-  },
-  signupButton: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-  },
-});
 
 export default LoginScreen;

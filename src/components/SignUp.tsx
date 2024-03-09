@@ -1,7 +1,9 @@
+// SignUpScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { signUpStyles } from '../styles/singUpStyles';
 
 type SignUpScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUp'>;
 
@@ -29,45 +31,33 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
     }
 
     try {
-      const response = await createAccount({
-        fullName,
-        cpf,
-        email,
-        password,
-        dob,
-      });
-
-      if (response.success) {
-        //navigation.navigate('Account');
-      } else {
-        console.error('Erro ao criar conta:', response.error);
-      }
+      // Implemente a lógica para criar a conta aqui
     } catch (error) {
       console.error('Erro ao criar conta:', error);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Crie sua conta</Text>
+    <View style={signUpStyles.container}>
+      <Text style={signUpStyles.title}>Crie sua conta</Text>
 
       <TextInput
-        style={styles.input}
+        style={signUpStyles.input}
         placeholder="Nome Completo"
         value={fullName}
         onChangeText={setFullName}
       />
 
       <TextInput
-        style={styles.input}
+        style={signUpStyles.input}
         placeholder="CPF"
         value={cpf}
         onChangeText={setCPF}
       />
 
-      <View style={styles.emailContainer}>
+      <View style={signUpStyles.emailContainer}>
         <TextInput
-          style={[styles.input, emailError ? styles.errorInput : null]}
+          style={[signUpStyles.input, emailError ? signUpStyles.errorInput : null]}
           placeholder="Email"
           value={email}
           onChangeText={(text) => {
@@ -76,11 +66,11 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
           }}
           onBlur={() => validateEmail(email)}
         />
-        {emailError ? <Text style={styles.errorMessage}>{emailError}</Text> : null}
+        {emailError ? <Text style={signUpStyles.errorMessage}>{emailError}</Text> : null}
       </View>
 
       <TextInput
-        style={styles.input}
+        style={signUpStyles.input}
         placeholder="Senha"
         secureTextEntry
         value={password}
@@ -88,48 +78,17 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
       />
 
       <TextInput
-        style={styles.input}
+        style={signUpStyles.input}
         placeholder="Data de Nascimento"
         value={dob}
         onChangeText={setDOB}
       />
 
-      <Button title="Criar Conta" onPress={handleSignUp} />
+      <TouchableOpacity style={signUpStyles.button} onPress={handleSignUp}>
+        <Text style={signUpStyles.buttonText}>Criar Conta</Text>
+      </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    width: '100%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
-  },
-  emailContainer: {
-    position: 'relative',
-    width: '100%',
-  },
-  errorInput: {
-    borderColor: 'red',
-  },
-  errorMessage: {
-    color: 'red',
-    position: 'absolute',
-    bottom: -20,
-  },
-});
 
 export default SignUpScreen;
